@@ -1,4 +1,9 @@
 <div x-cloak x-show="open" x-transition @task-saved.window="open = false"
+    @open-task-modal.window="
+    console.log('open-task-modal received');
+    open = true;
+    console.log('open:', open);
+"
     class="fixed inset-0 z-50 flex items-center justify-center bg-white/30 p-4 backdrop-blur-sm">
     <form wire:submit="save" @click.outside="open = false; $wire.clearForm()"
         class="w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-xl">
@@ -18,7 +23,7 @@
                 <label for="title" class="mb-1.5 block text-sm font-medium text-slate-700">
                     Title
                 </label>
-                <input type="text" id="title" wire:model.blur="title" placeholder="Enter task title"
+                <input type="text" id="title" wire:model="title" placeholder="Enter task title"
                     class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-800 
                     bg-indigo-50 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
 
@@ -35,7 +40,7 @@
                     Description
                 </label>
 
-                <textarea id="description" wire:model.blur="description" rows="4" placeholder="Describe the task..."
+                <textarea id="description" wire:model="description" rows="4" placeholder="Describe the task..."
                     class="w-full resize-none rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-800 
                   bg-indigo-50 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"></textarea>
 

@@ -12,7 +12,6 @@ class TaskList extends Component
 {
     #[On('task-saved')]
     #[On('task-deleted')]
-    #[On('edit-task')]
     public function refreshTasks()
     {
     }

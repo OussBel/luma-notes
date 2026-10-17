@@ -3,7 +3,7 @@
     <livewire:tag-form />
     <livewire:task-form />
 
-    <div class="grid grid-cols-1 gap-6 text-slate-800 md:grid-cols-3 lg:grid-cols-4">
+    <div class="grid grid-cols-1 items-start gap-6 text-slate-800 md:grid-cols-3 lg:grid-cols-4">
         @foreach ($statuses as $status)
             <x-board.column :status="$status" :tasks="$tasks->get($status->value, collect())" />
         @endforeach

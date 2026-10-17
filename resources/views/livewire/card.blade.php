@@ -5,54 +5,55 @@
         </h3>
 
         <p class="mt-2 text-sm leading-6 text-slate-500">
-            {{ $description }}
+            {{ \Illuminate\Support\Str::words($description, 15, ' ...') }}
         </p>
     </div>
 
-    {{-- Tags --}}
     @if (count($tags))
         <div class="mb-5 flex flex-wrap gap-2">
             @foreach ($tags as $tag)
                 <span
-                    class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ring-1 ring-inset ring-black/5 {{ $tag['bgColor'] }}">
-                    {{ $tag['name'] }}
+                    class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ring-1 ring-inset ring-black/5 {{ $tag->bgColor }}">
+                    {{ $tag->name }}
                 </span>
             @endforeach
         </div>
     @endif
 
-    {{-- Footer --}}
     <div class="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4">
-        {{-- Task metadata --}}
         <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
             <span class="inline-flex items-center gap-2 text-xs font-medium text-slate-600">
-                <span
-                    class="size-2 rounded-full
-                @switch($priority->value)
-                    @case('high') bg-rose-500 @break
-                    @case('medium') bg-amber-400 @break
-                    @default bg-emerald-500
-                @endswitch
-            "></span>
+                <span @class(['size-2 rounded-full', $priority->bgColor()]) "></span>
                 {{ $priority->name }}
             </span>
 
-            @if ($due_date)
-                <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.6"
-                        stroke="currentColor" class="size-4">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M6.75 3v2.25M17.25 3v2.25M3.75 8.25h16.5M5.25 5.25h13.5A1.5 1.5 0 0 1 20.25 6.75v12A1.5 1.5 0 0 1 18.75 20.25H5.25a1.5 1.5 0 0 1-1.5-1.5v-12a1.5 1.5 0 0 1 1.5-1.5Z" />
-                    </svg>
-                    {{ $due_date->format('M d, Y') }}
-                </span>
-            @endif
+                                    @if ($due_date)
+                    <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.6"
+                            stroke="currentColor" class="size-4">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M6.75 3v2.25M17.25 3v2.25M3.75 8.25h16.5M5.25 5.25h13.5A1.5 1.5 0 0 1 20.25 6.75v12A1.5 1.5 0 0 1 18.75 20.25H5.25a1.5 1.5 0 0 1-1.5-1.5v-12a1.5 1.5 0 0 1 1.5-1.5Z" />
+                        </svg>
+                        {{ $due_date->format('M d, Y') }}
+                    </span>
+                    @endif
         </div>
 
-        {{-- Actions --}}
-        <div class="flex shrink-0 items-center gap-0.5">
-            <button type="button" wire:click="edit" @click="open = true"
-                class="inline-flex size-6 items-center justify-center rounded-lg text-slate-400 transition hover:bg-indigo-50 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
+        <div class="flex shrink-0 items-center gap-2">
+            <a href="{{ route('view-task', ['task' => $taskId]) }}" wire:navigate
+                class="inline-flex items-center justify-center rounded-lg text-slate-400 transition
+                 hover:bg-indigo-50 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
+                aria-label="View task">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-4">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+            </a>
+            <button type="button" wire:click="edit"
+                class="inline-flex items-center justify-center rounded-lg text-slate-400 transition hover:bg-indigo-50
+                 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 cursor-pointer"
                 aria-label="Edit task">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7"
                     stroke="currentColor" class="size-4">
@@ -62,7 +63,8 @@
             </button>
 
             <button type="button" wire:click="delete" wire:confirm="Are you sure you want to delete this task?"
-                class="inline-flex size-6 items-center justify-center rounded-lg text-slate-400 transition hover:bg-red-50 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-500/30"
+                class="inline-flex items-center justify-center rounded-lg text-slate-400 transition cursor-pointer
+                 hover:bg-red-50 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-500/30"
                 aria-label="Delete task">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7"
                     stroke="currentColor" class="size-4">

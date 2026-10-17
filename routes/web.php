@@ -15,4 +15,7 @@ Route::middleware('guest')->group(function () {
         ->name('password.reset');
 });
 
-Route::livewire('/board', 'task-list')->name('board')->middleware('auth');
+Route::middleware("auth")->group(function () {
+    Route::livewire('/board', 'task-list')->name('board');
+    Route::livewire('/tasks/{task}', 'pages::view-task')->name('view-task');
+});

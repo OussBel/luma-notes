@@ -88,15 +88,17 @@ class TaskForm extends Component
     #[On('edit-task')]
     public function edit(int $id): void
     {
-        $this->task = Auth::user()->tasks()->with('tags')->findOrFail($id);
+        $task = Auth::user()->tasks()->with('tags')->findOrFail($id);
 
-        $this->title = $this->task->title;
-        $this->description = $this->task->description ?? '';
-        $this->status = $this->task->status;
-        $this->priority = $this->task->priority;
-        $this->due_date = $this->task->due_date?->format('Y-m-d');
+        $this->task = $task;
+        $this->title = $task->title;
+        $this->description = $task->description ?? '';
+        $this->status = $task->status;
+        $this->priority = $task->priority;
+        $this->due_date = $task->due_date?->format('Y-m-d');
+        $this->selectedTags = $task->tags->modelKeys();
 
-        $this->selectedTags = $this->task->tags->modelKeys();
+        $this->dispatch('open-task-modal');
     }
 
     public function save(): void
@@ -144,6 +146,11 @@ class TaskForm extends Component
 
     public function render()
     {
+        logger()->info('TaskForm rendering', [
+            'task_id' => $this->task?->id,
+            'title' => $this->title,
+        ]);
+
         return view('livewire.task-form', [
             'statuses' => TaskStatus::cases(),
             'priorities' => TaskPriority::cases(),
