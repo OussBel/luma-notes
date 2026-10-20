@@ -146,11 +146,6 @@ class TaskForm extends Component
 
     public function render()
     {
-        logger()->info('TaskForm rendering', [
-            'task_id' => $this->task?->id,
-            'title' => $this->title,
-        ]);
-
         return view('livewire.task-form', [
             'statuses' => TaskStatus::cases(),
             'priorities' => TaskPriority::cases(),

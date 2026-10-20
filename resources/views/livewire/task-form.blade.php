@@ -97,7 +97,7 @@
                     outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
                     @foreach ($statuses as $statusOption)
                         <option value="{{ $statusOption->value }}">
-                            {{ $statusOption->name }}
+                            {{ $statusOption->label() }}
                         </option>
                     @endforeach
                 </select>

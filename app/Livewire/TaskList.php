@@ -10,6 +10,10 @@ use Livewire\Component;
 
 class TaskList extends Component
 {
+    public string $search = '';
+    public ?string $taskPriority = null;
+    public bool $hasDueDate = false;
+
     #[On('task-saved')]
     #[On('task-deleted')]
     public function refreshTasks()
@@ -21,12 +25,31 @@ class TaskList extends Component
         $moveTask->handle(taskId: $id, position: $position, status: $columnId);
     }
 
+    #[On('task-filters-updated')]
+    public function applyFilters(string $search = '', ?string $priority = null, bool $hasDueDate = false)
+    {
+        $this->search = $search;
+        $this->taskPriority = $priority;
+        $this->hasDueDate = $hasDueDate;
+    }
+
+
     public function render()
     {
+        $tasks = Auth::user()
+            ->tasks()
+            ->search($this->search)
+            ->priority($this->taskPriority)
+            ->hasDueDate($this->hasDueDate)
+            ->orderBy('position')
+            ->get()
+            ->groupBy('status');
+
         return view('livewire.task-list', [
-            'tasks' => Auth::user()->tasks()->orderBy('position')->get()->groupBy('status'),
-            'statuses' => TaskStatus::cases()
+            'tasks' => $tasks,
+            'statuses' => TaskStatus::cases(),
         ]);
     }
+
 }
 

@@ -1,4 +1,4 @@
-<header class="mb-6 flex items-center justify-between">
+<header class="mb-6 flex items-start justify-between">
     <div>
         <h1 class="text-2xl font-bold text-slate-800">
             Board
@@ -8,8 +8,9 @@
         </p>
     </div>
 
+    <livewire:task-filters />
+
     <div class="flex items-center gap-2.5">
-        <!-- Create Tags -->
         <button type="button" @click="openTag = true"
             class="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-600 shadow-sm transition-all duration-200 hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
@@ -22,7 +23,6 @@
             <span>Create tags</span>
         </button>
 
-        <!-- New Task -->
         <button type="button" @click="open = true"
             class="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-indigo-700 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-indigo-600 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
