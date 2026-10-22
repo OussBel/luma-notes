@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Attributes\Scope;
-
-use App\Enums\TaskPriority;
-use App\Enums\TaskStatus;
 use Illuminate\Database\Eloquent\Builder;
+
+use App\Enums\TaskStatus;
+use App\Enums\TaskPriority;
+
 
 class Task extends Model
 {
@@ -54,17 +55,16 @@ class Task extends Model
     #[Scope]
     protected function priority(Builder $query, ?string $priority): void
     {
-        $query->when($priority, function ($q, $priorityValue) {
-            $q->where('priority', $priorityValue);
-        });
+        if ($priority) {
+            $query->where('priority', $priority);
+        }
     }
 
     #[Scope]
     protected function hasDueDate(Builder $query, bool $hasDueDate): void
     {
-        $query->when($hasDueDate, function ($q) {
-            $q->whereNotNull('due_date');
-        });
+        if ($hasDueDate) {
+            $query->whereNotNull('due_date');
+        }
     }
-
 }

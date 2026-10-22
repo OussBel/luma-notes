@@ -18,4 +18,5 @@ Route::middleware('guest')->group(function () {
 Route::middleware("auth")->group(function () {
     Route::livewire('/board', 'task-list')->name('board');
     Route::livewire('/tasks/{task}', 'pages::view-task')->name('view-task');
+    Route::livewire('/activity-log', 'pages::activity-log')->name('activity-log');
 });
